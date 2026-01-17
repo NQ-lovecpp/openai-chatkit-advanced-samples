@@ -1,0 +1,23 @@
+[Unit]
+Description=ChatKit demo backends container
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/chatkit-backends.env
+Restart=always
+RestartSec=5
+ExecStartPre=/usr/bin/docker rm -f chatkit-backends >/dev/null 2>&1 || true
+ExecStart=/usr/bin/docker run --rm --name chatkit-backends \
+  --env-file /etc/chatkit-backends.env \
+  -p 127.0.0.1:8000:8000 \
+  -p 127.0.0.1:8001:8001 \
+  -p 127.0.0.1:8002:8002 \
+  -p 127.0.0.1:8003:8003 \
+  chatkit-backends:latest
+ExecStop=/usr/bin/docker stop chatkit-backends
+ExecStopPost=/usr/bin/docker rm -f chatkit-backends >/dev/null 2>&1 || true
+
+[Install]
+WantedBy=multi-user.target

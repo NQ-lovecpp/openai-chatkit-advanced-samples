@@ -1,3 +1,8 @@
+Successfully deployed certificate for chenzhuowen.vip to /etc/nginx/sites-enabled/default
+Successfully deployed certificate for www.chenzhuowen.vip to /etc/nginx/sites-enabled/default
+Successfully deployed certificate for ai.chenzhuowen.vip to /etc/nginx/sites-enabled/ai.chenzhuowen.vip.conf
+
+
 # OpenAI ChatKit Examples
 
 This repository collects scenario-driven ChatKit demos. Each example pairs a FastAPI backend with a Vite + React frontend, implementing a custom backend using ChatKit Python SDK and wiring it up with ChatKit.js client-side.
