@@ -75,11 +75,15 @@
    sudo nginx -t
    sudo systemctl reload nginx
    ```
-   - `ai.chenzhuowen.vip/cat-lounge/` / `.../customer-support/` / `.../news-guide/` / `.../metro-map/` 会分别直接映射到各自 `examples/*/frontend/dist` 目录；
-   - `/cat-lounge/chatkit`、`/cat-lounge/cats` 等 API 路径由 `/etc/nginx/snippets/chatkit-proxy.conf` 代理到 8000～8003 四个后端；
-   `/etc/nginx/snippets/chatkit-proxy.conf` 仍然包含 websocket 所需的头部设置以及标准的转发头。
+   - 配置包含 HTTPS 支持（监听端口 443），使用 Let's Encrypt SSL 证书
+   - 添加了 `Content-Security-Policy "upgrade-insecure-requests"` 头，防止 Mixed Content 错误
+   - HTTP 请求（端口 80）会自动重定向到 HTTPS
+   - API 路径去除了末尾斜杠，以兼容不带斜杠的请求
+   - `ai.chenzhuowen.vip/cat-lounge/` / `.../customer-support/` / `.../news-guide/` / `.../metro-map/` 会分别直接映射到各自 `examples/*/frontend/dist` 目录
+   - `/cat-lounge/chatkit`、`/cat-lounge/cats` 等 API 路径由 `/etc/nginx/snippets/chatkit-proxy.conf` 代理到 8000～8003 四个后端
+   - `/etc/nginx/snippets/chatkit-proxy.conf` 包含 websocket 所需的头部设置以及标准的转发头
 
 6. **验证**
    - 使用 `curl http://127.0.0.1:8000` 等确认后端正在响应。
    - `systemctl status chatkit-backends.service` 确认容器运行。
-   - 访问 `http://ai.chenzhuowen.vip/cat-lounge/` 等确保前端通过 Nginx 可达。
+   - 访问 `https://ai.chenzhuowen.vip/cat-lounge/` 等确保前端通过 HTTPS 正常访问（HTTP 会自动重定向到 HTTPS）。
